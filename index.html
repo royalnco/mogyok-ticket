@@ -15,10 +15,13 @@
   .card { width:100%; max-width:480px; }
   .kv { position:relative; width:100%; aspect-ratio:1080/1350; background:url(kv.jpg) center/cover; container-type:inline-size; }
   /* tag centre: x 550/1080, y 655/1350; inner usable diameter ~ 300/1080 */
-  .name { position:absolute; left:54.5%; top:49.5%; transform:translate(-50%,-50%) rotate(-8deg);
+  .name { position:absolute; left:53%; top:49%; transform:translate(-50%,-50%) rotate(-4deg);
           width:27cqw; text-align:center; font-family:'PretendardName',Pretendard,sans-serif;
           font-weight:700; line-height:1; letter-spacing:-0.03em;
-          color:var(--ink); white-space:nowrap; font-size:15cqw; }
+          color:#000; white-space:nowrap; font-size:15cqw; }
+  /* 열쇠 컷아웃(kv.jpg에서 추출) — 이름 위에 겹쳐 열쇠가 글자를 살짝 덮게 */
+  .keyover { position:absolute; left:32.963%; top:33.704%; width:22.222%; height:17.111%;
+             background:url(key.png) center/100% 100% no-repeat; pointer-events:none; }
   .day { margin:4px 16px 0; border-radius:14px; padding:16px 18px; text-align:center; }
   .day.fri { background:var(--green); color:var(--ink); }
   .day.sat { background:var(--ink); color:var(--cream); }
@@ -33,6 +36,7 @@
 <main class="card">
   <div class="kv" role="img" aria-label="목욕마켓 락커키">
     <div class="name" id="name">목욕러</div>
+    <div class="keyover" aria-hidden="true"></div>
   </div>
   <div class="day fri" id="day">
     <div class="date" id="date">11.20 FRI</div>
@@ -55,9 +59,9 @@
   var hangul = /[가-힣]/.test(name);
   var size = hangul ? [15,15,12,9,7.5,6.5,5.6,5][Math.min(len,8)-1] : [15,15,11,9,7.5,6.2,5.4,4.8][Math.min(len,8)-1];
   el.style.fontSize = size + 'cqw';
-  // 긴 이름도 원 안(최대 26.5cqw, 열쇠 피해 오른쪽)에 들어오도록 자동 축소
+  // 긴 이름도 원 안(최대 31cqw)에 들어오도록 자동 축소
   function fit() {
-    var kv = el.parentNode.offsetWidth, max = kv * 0.265, s = size;
+    var kv = el.parentNode.offsetWidth, max = kv * 0.31, s = size;
     el.style.width = 'auto';
     while (el.scrollWidth > max && s > 3) { s -= 0.2; el.style.fontSize = s + 'cqw'; }
   }
