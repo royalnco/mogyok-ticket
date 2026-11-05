@@ -27,9 +27,19 @@
   .day.sat { background:var(--ink); color:var(--cream); }
   .day .date { font-size:34px; font-weight:900; letter-spacing:-0.02em; }
   .day .time { font-size:15px; font-weight:600; margin-top:4px; opacity:.9; }
-  .guide { padding:18px 20px 32px; text-align:center; font-size:15px; line-height:1.6; }
+  .guide { padding:18px 20px 24px; text-align:center; font-size:15px; line-height:1.6; }
   .guide b { font-weight:800; }
   .guide small { display:block; margin-top:8px; font-size:12px; opacity:.7; }
+  /* 안내 (5개 언어 탭) */
+  .notice { margin:0 16px 36px; padding:16px 16px 18px; border-top:1.5px solid var(--ink); }
+  .langs { display:flex; flex-wrap:wrap; gap:5px; justify-content:center; margin-bottom:14px; }
+  .langs button { font:600 11.5px/1 Pretendard,-apple-system,sans-serif; color:var(--ink); background:transparent;
+                  border:1px solid var(--ink); border-radius:999px; padding:6px 9px; cursor:pointer; white-space:nowrap; }
+  .langs button[aria-pressed="true"] { background:var(--ink); color:var(--cream); }
+  .notice ul { list-style:none; font-size:13px; line-height:1.6; }
+  .notice li { position:relative; padding-left:14px; margin-top:8px; }
+  .notice li::before { content:"*"; position:absolute; left:0; top:0; font-weight:700; }
+  .notice [lang]:not(.on) { display:none; }
 </style>
 </head>
 <body>
@@ -47,6 +57,36 @@
     입구 카운터에서 이 화면을 보여주세요.<br>진짜 팔찌로 바꿔드립니다.
     <small>화면을 캡처해 두면 줄 서서 다시 열 필요가 없어요</small>
   </p>
+  <section class="notice" aria-label="안내 Notice">
+    <div class="langs" role="group" aria-label="언어 Language">
+      <button data-l="ko">한국어</button><button data-l="en">English</button><button data-l="ja">日本語</button><button data-l="fi">Suomi</button><button data-l="sv">Svenska</button>
+    </div>
+    <ul lang="ko">
+      <li>당일 건물 내 주차가 불가합니다. 대중교통 또는 인근 유료 주차장(삼익악기 주차장, 도보 5분)을 이용해 주세요.</li>
+      <li>테라스와 주차장에서 사우나 캐빈과 미쉐린 스타 셰프의 푸드트럭을 만나보세요.</li>
+      <li>럭키드로우 당첨 선물은 현장에서만 수령할 수 있습니다.</li>
+    </ul>
+    <ul lang="en">
+      <li>Parking is not available in the building on event days. Please use public transport or the nearby paid car park (Samick car park, 5 min walk).</li>
+      <li>Find the sauna cabin and a Michelin-starred chef’s food truck on the terrace and in the car park.</li>
+      <li>Lucky draw prizes must be picked up on site.</li>
+    </ul>
+    <ul lang="ja">
+      <li>当日は建物内に駐車できません。公共交通機関または近隣の有料駐車場（サミック楽器駐車場・徒歩5分）をご利用ください。</li>
+      <li>テラスと駐車場では、サウナキャビンとミシュラン星付きシェフのフードトラックをお楽しみいただけます。</li>
+      <li>ラッキードローの景品は会場でのお受け取りのみとなります。</li>
+    </ul>
+    <ul lang="fi">
+      <li>Rakennuksessa ei voi pysäköidä tapahtumapäivinä. Käytäthän julkista liikennettä tai läheistä maksullista pysäköintialuetta (Samickin pysäköintialue, 5 min kävelymatka).</li>
+      <li>Terassilta ja pysäköintialueelta löydät saunamökin sekä Michelin-tähtikokin ruokarekan.</li>
+      <li>Arvonnan palkinnot on noudettava paikan päältä.</li>
+    </ul>
+    <ul lang="sv">
+      <li>Det går inte att parkera i byggnaden under evenemangsdagarna. Åk gärna kollektivt eller använd den avgiftsbelagda parkeringen i närheten (Samick-parkeringen, 5 min promenad).</li>
+      <li>På terrassen och parkeringen hittar du bastustugan och en Michelinstjärnig kocks food truck.</li>
+      <li>Vinster i utlottningen måste hämtas på plats.</li>
+    </ul>
+  </section>
 </main>
 <script>
   var q = new URLSearchParams(location.search);
@@ -73,6 +113,20 @@
     document.getElementById('date').textContent = '11.21 SAT';
     document.getElementById('time').textContent = '11am – 6pm · 로얄앤코하우스 서울';
   }
+</script>
+<script>
+  // 안내 언어: ?lang= > 브라우저 언어 > 한국어
+  (function(){
+    var ok=['ko','en','ja','fi','sv'], p=new URLSearchParams(location.search).get('lang');
+    var nav=(navigator.language||'ko').slice(0,2).toLowerCase();
+    var cur=ok.indexOf(p)>-1?p:(ok.indexOf(nav)>-1?nav:'ko');
+    function set(l){
+      document.querySelectorAll('.notice ul').forEach(function(u){u.classList.toggle('on',u.lang===l);});
+      document.querySelectorAll('.langs button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.l===l);});
+    }
+    document.querySelectorAll('.langs button').forEach(function(b){b.onclick=function(){set(b.dataset.l);};});
+    set(cur);
+  })();
 </script>
 </body>
 </html>
