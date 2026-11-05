@@ -42,10 +42,12 @@
   .guide small { display:block; margin-top:8px; font-size:12px; opacity:.7; }
   /* 안내 (5개 언어 탭) */
   .notice { margin:0 16px 36px; padding:16px 16px 18px; border-top:1.5px solid var(--ink); }
-  .langs { display:flex; flex-wrap:wrap; gap:5px; justify-content:center; margin:14px 16px 12px; }
-  .langs button { font:600 11.5px/1 'GeneralSans',Pretendard,-apple-system,sans-serif; color:var(--ink); background:transparent;
-                  border:1px solid var(--ink); border-radius:999px; padding:6px 9px; cursor:pointer; white-space:nowrap; }
-  .langs button[aria-pressed="true"] { background:var(--ink); color:var(--cream); }
+  /* 언어 선택: 캡처 영역 밖(맨 아래) 작은 텍스트 링크 */
+  .langs { display:flex; flex-wrap:wrap; justify-content:center; gap:2px 0; margin:-20px 16px 28px; }
+  .langs button { font:500 12px/1 'GeneralSans',Pretendard,-apple-system,sans-serif; color:var(--ink); opacity:.5;
+                  background:none; border:0; padding:6px 8px; cursor:pointer; white-space:nowrap; }
+  .langs button + button { border-left:1px solid rgba(35,31,32,.3); }
+  .langs button[aria-pressed="true"] { opacity:1; font-weight:600; text-decoration:underline; text-underline-offset:3px; }
   .notice ul { list-style:none; font-size:13px; line-height:1.6; }
   .notice li { position:relative; padding-left:14px; margin-top:8px; }
   .notice li::before { content:"*"; position:absolute; left:0; top:0; font-weight:700; }
@@ -59,9 +61,6 @@
     <div class="keyover" aria-hidden="true"></div>
     <div class="kvcover" aria-hidden="true"></div>
     <div class="kvsub" id="kvsub"></div>
-  </div>
-  <div class="langs" role="group" aria-label="언어 Language">
-      <button data-l="ko">한국어</button><button data-l="en">English</button><button data-l="ja">日本語</button><button data-l="fi">Suomi</button><button data-l="sv">Svenska</button>
   </div>
   <div class="day fri" id="day">
     <div class="date" id="date">11.20 FRI</div>
@@ -98,6 +97,9 @@
       <li>Vinster i utlottningen måste hämtas på plats.</li>
     </ul>
   </section>
+  <div class="langs" role="group" aria-label="언어 Language">
+      <button data-l="ko">한국어</button><button data-l="en">English</button><button data-l="ja">日本語</button><button data-l="fi">Suomi</button><button data-l="sv">Svenska</button>
+  </div>
 </main>
 <script>
   var q = new URLSearchParams(location.search);
