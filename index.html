@@ -7,7 +7,7 @@
 <title>목욕마켓² 락커키</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
-  @font-face { font-family:'PretendardName'; src:url(Pretendard-SemiBold.woff2) format('woff2'); font-weight:600; font-display:block; }
+  @font-face { font-family:'PretendardName'; src:url(Pretendard-Bold.woff2) format('woff2'); font-weight:700; font-display:block; }
   :root { --bg:#CCC9C2; --ink:#231F20; --green:#00B003; --cream:#F4F1EA; }
   * { box-sizing:border-box; margin:0; padding:0; }
   html,body { background:var(--bg); color:var(--ink); font-family:Pretendard,-apple-system,sans-serif; }
@@ -15,9 +15,9 @@
   .card { width:100%; max-width:480px; }
   .kv { position:relative; width:100%; aspect-ratio:1080/1350; background:url(kv.jpg) center/cover; container-type:inline-size; }
   /* tag centre: x 550/1080, y 655/1350; inner usable diameter ~ 300/1080 */
-  .name { position:absolute; left:53%; top:49%; transform:translate(-50%,-50%) rotate(-4deg);
+  .name { position:absolute; left:54.5%; top:49.5%; transform:translate(-50%,-50%) rotate(-8deg);
           width:27cqw; text-align:center; font-family:'PretendardName',Pretendard,sans-serif;
-          font-weight:600; line-height:1; letter-spacing:-0.03em;
+          font-weight:700; line-height:1; letter-spacing:-0.03em;
           color:var(--ink); white-space:nowrap; font-size:15cqw; }
   .day { margin:4px 16px 0; border-radius:14px; padding:16px 18px; text-align:center; }
   .day.fri { background:var(--green); color:var(--ink); }
@@ -55,9 +55,9 @@
   var hangul = /[가-힣]/.test(name);
   var size = hangul ? [15,15,12,9,7.5,6.5,5.6,5][Math.min(len,8)-1] : [15,15,11,9,7.5,6.2,5.4,4.8][Math.min(len,8)-1];
   el.style.fontSize = size + 'cqw';
-  // 긴 이름도 원 안(최대 31cqw)에 들어오도록 자동 축소
+  // 긴 이름도 원 안(최대 26.5cqw, 열쇠 피해 오른쪽)에 들어오도록 자동 축소
   function fit() {
-    var kv = el.parentNode.offsetWidth, max = kv * 0.31, s = size;
+    var kv = el.parentNode.offsetWidth, max = kv * 0.265, s = size;
     el.style.width = 'auto';
     while (el.scrollWidth > max && s > 3) { s -= 0.2; el.style.fontSize = s + 'cqw'; }
   }
