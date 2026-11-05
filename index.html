@@ -24,7 +24,7 @@
              background:url(key.png) center/100% 100% no-repeat; pointer-events:none; }
   .day { margin:4px 16px 0; border-radius:14px; padding:16px 18px; text-align:center; }
   .day.fri { background:var(--green); color:var(--ink); }
-  .day.sat { background:var(--cream); color:var(--green); }
+  .day.sat { background:var(--ink); color:var(--cream); }
   .day .date { font-size:34px; font-weight:900; letter-spacing:-0.02em; }
   .day .time { font-size:15px; font-weight:600; margin-top:4px; opacity:.9; }
   .guide { padding:18px 20px 24px; text-align:center; font-size:15px; line-height:1.6; }
@@ -32,7 +32,7 @@
   .guide small { display:block; margin-top:8px; font-size:12px; opacity:.7; }
   /* 안내 (5개 언어 탭) */
   .notice { margin:0 16px 36px; padding:16px 16px 18px; border-top:1.5px solid var(--ink); }
-  .langs { display:flex; flex-wrap:wrap; gap:5px; justify-content:center; margin-bottom:14px; }
+  .langs { display:flex; flex-wrap:wrap; gap:5px; justify-content:center; margin:14px 16px 12px; }
   .langs button { font:600 11.5px/1 Pretendard,-apple-system,sans-serif; color:var(--ink); background:transparent;
                   border:1px solid var(--ink); border-radius:999px; padding:6px 9px; cursor:pointer; white-space:nowrap; }
   .langs button[aria-pressed="true"] { background:var(--ink); color:var(--cream); }
@@ -48,19 +48,18 @@
     <div class="name" id="name">목욕러</div>
     <div class="keyover" aria-hidden="true"></div>
   </div>
+  <div class="langs" role="group" aria-label="언어 Language">
+      <button data-l="ko">한국어</button><button data-l="en">English</button><button data-l="ja">日本語</button><button data-l="fi">Suomi</button><button data-l="sv">Svenska</button>
+  </div>
   <div class="day fri" id="day">
     <div class="date" id="date">11.20 FRI</div>
     <div class="time" id="time">4pm – 10pm · 로얄앤코하우스 서울</div>
   </div>
   <p class="guide">
-    <b id="who">목욕러</b>님의 락커키가 나왔어요.<br>
-    입구 카운터에서 이 화면을 보여주세요.
-    <small>화면을 캡처해 두면 줄 서서 다시 열 필요가 없어요</small>
+    <span id="g1"></span><br><span id="g2"></span>
+    <small id="g3"></small>
   </p>
   <section class="notice" aria-label="안내 Notice">
-    <div class="langs" role="group" aria-label="언어 Language">
-      <button data-l="ko">한국어</button><button data-l="en">English</button><button data-l="ja">日本語</button><button data-l="fi">Suomi</button><button data-l="sv">Svenska</button>
-    </div>
     <ul lang="ko">
       <li>당일 건물 내 주차가 불가합니다. 대중교통 또는 인근 유료 주차장(삼익악기 주차장, 도보 5분)을 이용해 주세요.</li>
       <li>테라스와 주차장에서 사우나 캐빈과 미쉐린 스타 셰프의 푸드트럭을 만나보세요.</li>
@@ -94,7 +93,6 @@
   var name = Array.from(raw).slice(0, 8).join('') || '목욕러';
   var el = document.getElementById('name');
   el.textContent = name;
-  document.getElementById('who').textContent = name;
   var len = Array.from(name).length;
   var hangul = /[가-힣]/.test(name);
   var size = hangul ? [15,15,12,9,7.5,6.5,5.6,5][Math.min(len,8)-1] : [15,15,11,9,7.5,6.2,5.4,4.8][Math.min(len,8)-1];
@@ -107,24 +105,38 @@
   }
   (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(fit);
   window.addEventListener('resize', function(){ el.style.fontSize = size + 'cqw'; fit(); });
-  if (q.get('d') === '21' || /21|토|SAT/i.test(q.get('d') || '')) {
-    var d = document.getElementById('day');
-    d.className = 'day sat';
-    document.getElementById('date').textContent = '11.21 SAT';
-    document.getElementById('time').textContent = '11am – 6pm · 로얄앤코하우스 서울';
-  }
 </script>
 <script>
-  // 안내 언어: ?lang= > 브라우저 언어 > 한국어
+  // 언어: ?lang= > 브라우저 언어 > 한국어. 날짜 카드·안내 문구·주의사항이 함께 바뀜
   (function(){
-    var ok=['ko','en','ja','fi','sv'], p=new URLSearchParams(location.search).get('lang');
-    var nav=(navigator.language||'ko').slice(0,2).toLowerCase();
-    var cur=ok.indexOf(p)>-1?p:(ok.indexOf(nav)>-1?nav:'ko');
+    var T = {
+      ko:{fri:'4pm – 10pm · 로얄앤코하우스 서울', sat:'11am – 6pm · 로얄앤코하우스 서울',
+          g1:'{n}님의 락커키가 나왔어요.', g2:'입구 카운터에서 이 화면을 보여주세요.', g3:'화면을 캡처해 두면 줄 서서 다시 열 필요가 없어요'},
+      en:{fri:'4pm – 10pm · ROYAL&CO. HOUSE Seoul', sat:'11am – 6pm · ROYAL&CO. HOUSE Seoul',
+          g1:'{n}, your locker key is ready.', g2:'Show this screen at the entrance counter.', g3:'Take a screenshot so you don’t have to reopen it in line.'},
+      ja:{fri:'16:00 – 22:00 · ROYAL&CO. HOUSE ソウル', sat:'11:00 – 18:00 · ROYAL&CO. HOUSE ソウル',
+          g1:'{n}さんのロッカーキーができました。', g2:'入口カウンターでこの画面をご提示ください。', g3:'スクリーンショットを保存しておくと、列で開き直す必要がありません。'},
+      fi:{fri:'klo 16–22 · ROYAL&CO. HOUSE Soul', sat:'klo 11–18 · ROYAL&CO. HOUSE Soul',
+          g1:'{n}, pukukaappisi avain on valmis.', g2:'Näytä tämä näkymä sisäänkäynnin tiskillä.', g3:'Ota kuvakaappaus, niin sinun ei tarvitse avata sivua uudelleen jonossa.'},
+      sv:{fri:'kl. 16–22 · ROYAL&CO. HOUSE Seoul', sat:'kl. 11–18 · ROYAL&CO. HOUSE Seoul',
+          g1:'{n}, din skåpnyckel är klar.', g2:'Visa den här skärmen vid entrédisken.', g3:'Ta en skärmdump så slipper du öppna sidan igen i kön.'}
+    };
+    var sat = q.get('d') === '21' || /21|토|SAT/i.test(q.get('d') || '');
+    if (sat) { document.getElementById('day').className = 'day sat'; document.getElementById('date').textContent = '11.21 SAT'; }
+    var ok = Object.keys(T), p = q.get('lang'), nav = (navigator.language || 'ko').slice(0,2).toLowerCase();
+    var cur = ok.indexOf(p) > -1 ? p : (ok.indexOf(nav) > -1 ? nav : 'ko');
     function set(l){
-      document.querySelectorAll('.notice ul').forEach(function(u){u.classList.toggle('on',u.lang===l);});
-      document.querySelectorAll('.langs button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.l===l);});
+      var t = T[l], g1 = document.getElementById('g1'), parts = t.g1.split('{n}'), b = document.createElement('b');
+      b.textContent = name;                       // 이름은 textContent로만 삽입(HTML 주입 방지)
+      g1.textContent = ''; g1.append(parts[0], b, parts[1]);
+      document.getElementById('g2').textContent = t.g2;
+      document.getElementById('g3').textContent = t.g3;
+      document.getElementById('time').textContent = sat ? t.sat : t.fri;
+      document.documentElement.lang = l;
+      document.querySelectorAll('.notice ul').forEach(function(u){ u.classList.toggle('on', u.lang === l); });
+      document.querySelectorAll('.langs button').forEach(function(x){ x.setAttribute('aria-pressed', x.dataset.l === l); });
     }
-    document.querySelectorAll('.langs button').forEach(function(b){b.onclick=function(){set(b.dataset.l);};});
+    document.querySelectorAll('.langs button').forEach(function(x){ x.onclick = function(){ set(x.dataset.l); }; });
     set(cur);
   })();
 </script>
