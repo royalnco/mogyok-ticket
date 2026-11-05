@@ -7,16 +7,18 @@
 <title>목욕마켓² 락커키</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
+  @font-face { font-family:'GeneralSans'; src:url(GeneralSans-Variable.woff2) format('woff2'); font-weight:200 700; font-display:swap;
+               unicode-range:U+0000-024F, U+2000-206F, U+20AC, U+2122; }
   @font-face { font-family:'PretendardName'; src:url(Pretendard-Bold.woff2) format('woff2'); font-weight:700; font-display:block; }
   :root { --bg:#CCC9C2; --ink:#231F20; --green:#00B003; --cream:#F4F1EA; }
   * { box-sizing:border-box; margin:0; padding:0; }
-  html,body { background:var(--bg); color:var(--ink); font-family:Pretendard,-apple-system,sans-serif; }
+  html,body { background:var(--bg); color:var(--ink); font-family:'GeneralSans',Pretendard,-apple-system,sans-serif; }
   body { min-height:100svh; display:flex; flex-direction:column; align-items:center; }
   .card { width:100%; max-width:480px; }
   .kv { position:relative; width:100%; aspect-ratio:1080/1350; background:url(kv.jpg) center/cover; container-type:inline-size; }
   /* tag centre: x 550/1080, y 655/1350; inner usable diameter ~ 300/1080 */
   .name { position:absolute; left:53%; top:49%; transform:translate(-50%,-50%) rotate(-4deg);
-          width:27cqw; text-align:center; font-family:'PretendardName',Pretendard,sans-serif;
+          width:27cqw; text-align:center; font-family:'GeneralSans','PretendardName',Pretendard,sans-serif;
           font-weight:700; line-height:1; letter-spacing:-0.03em;
           color:#000; white-space:nowrap; font-size:15cqw; }
   /* 열쇠 컷아웃(kv.jpg에서 추출) — 이름 위에 겹쳐 열쇠가 글자를 살짝 덮게 */
@@ -27,7 +29,7 @@
   .kvcover { position:absolute; left:30.556%; top:77.037%; width:38.889%; height:7.037%;
              background:url(kv-cover.png) center/100% 100% no-repeat; pointer-events:none; }
   .kvsub { position:absolute; left:0; right:0; top:78.1%; text-align:center; color:#35352E;
-           font-family:'PretendardKV',Pretendard,-apple-system,sans-serif; font-weight:400;
+           font-family:'GeneralSans','PretendardKV',Pretendard,-apple-system,sans-serif; font-weight:400;
            font-size:2.55cqw; line-height:1.37; letter-spacing:-0.01em; pointer-events:none; }
   .kv.ko .kvcover, .kv.ko .kvsub { display:none; }
   .day { margin:4px 16px 0; border-radius:14px; padding:16px 18px; text-align:center; }
@@ -41,7 +43,7 @@
   /* 안내 (5개 언어 탭) */
   .notice { margin:0 16px 36px; padding:16px 16px 18px; border-top:1.5px solid var(--ink); }
   .langs { display:flex; flex-wrap:wrap; gap:5px; justify-content:center; margin:14px 16px 12px; }
-  .langs button { font:600 11.5px/1 Pretendard,-apple-system,sans-serif; color:var(--ink); background:transparent;
+  .langs button { font:600 11.5px/1 'GeneralSans',Pretendard,-apple-system,sans-serif; color:var(--ink); background:transparent;
                   border:1px solid var(--ink); border-radius:999px; padding:6px 9px; cursor:pointer; white-space:nowrap; }
   .langs button[aria-pressed="true"] { background:var(--ink); color:var(--cream); }
   .notice ul { list-style:none; font-size:13px; line-height:1.6; }
@@ -100,7 +102,7 @@
 <script>
   var q = new URLSearchParams(location.search);
   var raw = (q.get('n') || '').trim().replace(/\s+/g, ' ');
-  var name = Array.from(raw).slice(0, 8).join('') || '목욕러';
+  var name = Array.from(raw).slice(0, /[^\u0000-\u024F]/.test(raw) ? 8 : 12).join('') || '목욕러';  // 라틴 이름은 12자, 그 외 8자
   var el = document.getElementById('name');
   el.textContent = name;
   var len = Array.from(name).length;
