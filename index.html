@@ -7,7 +7,8 @@
 <title>목욕마켓² 락커키</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
-  :root { --bg:#CCC9C2; --ink:#231F20; --green:#00B003; --cream:#F4F1EA; }
+  @font-face { font-family:'Moneygraphy'; src:url(Moneygraphy-Rounded.woff2) format('woff2'); font-display:block; }
+  :root { --bg:#CCC9C2; --ink:#231F20; --green:#00B003; --cream:#F4F1EA; --tag-ink:#0F4A1C; }
   * { box-sizing:border-box; margin:0; padding:0; }
   html,body { background:var(--bg); color:var(--ink); font-family:Pretendard,-apple-system,sans-serif; }
   body { min-height:100svh; display:flex; flex-direction:column; align-items:center; }
@@ -15,8 +16,9 @@
   .kv { position:relative; width:100%; aspect-ratio:1080/1350; background:url(kv.jpg) center/cover; container-type:inline-size; }
   /* tag centre: x 550/1080, y 655/1350; inner usable diameter ~ 300/1080 */
   .name { position:absolute; left:53%; top:49%; transform:translate(-50%,-50%) rotate(-4deg);
-          width:27cqw; text-align:center; font-weight:900; line-height:1; letter-spacing:-0.04em;
-          color:var(--ink); white-space:nowrap; font-size:15cqw; }
+          width:27cqw; text-align:center; font-family:'Moneygraphy',Pretendard,sans-serif;
+          font-weight:normal; font-synthesis:none; line-height:1; letter-spacing:-0.02em;
+          color:var(--tag-ink); white-space:nowrap; font-size:15cqw; }
   .day { margin:4px 16px 0; border-radius:14px; padding:16px 18px; text-align:center; }
   .day.fri { background:var(--green); color:var(--ink); }
   .day.sat { background:var(--ink); color:var(--cream); }
@@ -53,6 +55,14 @@
   var hangul = /[가-힣]/.test(name);
   var size = hangul ? [15,15,12,9,7.5,6.5,5.6,5][Math.min(len,8)-1] : [15,15,11,9,7.5,6.2,5.4,4.8][Math.min(len,8)-1];
   el.style.fontSize = size + 'cqw';
+  // 머니그라피는 글자 폭이 넓어 원 안(최대 31cqw)에 들어오도록 자동 축소
+  function fit() {
+    var kv = el.parentNode.offsetWidth, max = kv * 0.31, s = size;
+    el.style.width = 'auto';
+    while (el.scrollWidth > max && s > 3) { s -= 0.2; el.style.fontSize = s + 'cqw'; }
+  }
+  (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(fit);
+  window.addEventListener('resize', function(){ el.style.fontSize = size + 'cqw'; fit(); });
   if (q.get('d') === '21' || /21|토|SAT/i.test(q.get('d') || '')) {
     var d = document.getElementById('day');
     d.className = 'day sat';
