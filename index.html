@@ -42,8 +42,8 @@
   .guide small { display:block; margin-top:8px; font-size:12px; opacity:.7; }
   /* 안내 (5개 언어 탭) */
   .notice { margin:0 16px 36px; padding:16px 16px 18px; border-top:1.5px solid var(--ink); }
-  /* 언어 선택: 캡처 영역 밖(맨 아래) 작은 텍스트 링크 */
-  .langs { display:flex; flex-wrap:wrap; justify-content:center; gap:2px 0; margin:-20px 16px 28px; }
+  /* 언어 선택: 안내 문구와 주의사항 사이, 작은 텍스트 링크 */
+  .langs { display:flex; flex-wrap:wrap; justify-content:center; gap:2px 0; margin:0 16px 6px; }
   .langs button { font:500 12px/1 'GeneralSans',Pretendard,-apple-system,sans-serif; color:var(--ink); opacity:.5;
                   background:none; border:0; padding:6px 8px; cursor:pointer; white-space:nowrap; }
   .langs button + button { border-left:1px solid rgba(35,31,32,.3); }
@@ -70,36 +70,41 @@
     <span id="g1"></span><br><span id="g2"></span>
     <small id="g3"></small>
   </p>
+  <div class="langs" role="group" aria-label="언어 Language">
+      <button data-l="ko">한국어</button><button data-l="en">English</button><button data-l="ja">日本語</button><button data-l="fi">Suomi</button><button data-l="sv">Svenska</button>
+  </div>
   <section class="notice" aria-label="안내 Notice">
     <ul lang="ko">
+      <li>대로변에 위치한 정문으로 입장해 주세요. (논현로 709)</li>
       <li>당일 건물 내 주차가 불가합니다. 대중교통 또는 인근 유료 주차장(삼익악기 주차장, 도보 5분)을 이용해 주세요.</li>
       <li>테라스와 주차장에서 사우나 캐빈과 미쉐린 스타 셰프의 푸드트럭을 만나보세요.</li>
       <li>럭키드로우 당첨 선물은 현장에서만 수령할 수 있습니다.</li>
     </ul>
     <ul lang="en">
+      <li>Please enter through the main entrance on the main road (709 Nonhyeon-ro).</li>
       <li>Parking is not available in the building on event days. Please use public transport or the nearby paid car park (Samick car park, 5 min walk).</li>
       <li>Find the sauna cabin and a Michelin-starred chef’s food truck on the terrace and in the car park.</li>
       <li>Lucky draw prizes must be picked up on site.</li>
     </ul>
     <ul lang="ja">
+      <li>大通り沿いの正面入口からご入場ください（論峴路709）。</li>
       <li>当日は建物内に駐車できません。公共交通機関または近隣の有料駐車場（サミック楽器駐車場・徒歩5分）をご利用ください。</li>
       <li>テラスと駐車場では、サウナキャビンとミシュラン星付きシェフのフードトラックをお楽しみいただけます。</li>
       <li>ラッキードローの景品は会場でのお受け取りのみとなります。</li>
     </ul>
     <ul lang="fi">
+      <li>Sisään pääsee pääkadun puoleisesta pääovesta (Nonhyeon-ro 709).</li>
       <li>Rakennuksessa ei voi pysäköidä tapahtumapäivinä. Käytäthän julkista liikennettä tai läheistä maksullista pysäköintialuetta (Samickin pysäköintialue, 5 min kävelymatka).</li>
       <li>Terassilta ja pysäköintialueelta löydät saunamökin sekä Michelin-tähtikokin ruokarekan.</li>
       <li>Arvonnan palkinnot on noudettava paikan päältä.</li>
     </ul>
     <ul lang="sv">
+      <li>Gå in genom huvudentrén mot den stora gatan (Nonhyeon-ro 709).</li>
       <li>Det går inte att parkera i byggnaden under evenemangsdagarna. Åk gärna kollektivt eller använd den avgiftsbelagda parkeringen i närheten (Samick-parkeringen, 5 min promenad).</li>
       <li>På terrassen och parkeringen hittar du bastustugan och en Michelinstjärnig kocks food truck.</li>
       <li>Vinster i utlottningen måste hämtas på plats.</li>
     </ul>
   </section>
-  <div class="langs" role="group" aria-label="언어 Language">
-      <button data-l="ko">한국어</button><button data-l="en">English</button><button data-l="ja">日本語</button><button data-l="fi">Suomi</button><button data-l="sv">Svenska</button>
-  </div>
 </main>
 <script>
   var q = new URLSearchParams(location.search);
