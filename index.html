@@ -22,6 +22,14 @@
   /* 열쇠 컷아웃(kv.jpg에서 추출) — 이름 위에 겹쳐 열쇠가 글자를 살짝 덮게 */
   .keyover { position:absolute; left:32.963%; top:33.704%; width:22.222%; height:17.111%;
              background:url(key.png) center/100% 100% no-repeat; pointer-events:none; }
+  /* KV 속 국문 카피(목욕을 좋아하는…)를 배경 질감 패치로 덮고 선택 언어로 다시 얹음 */
+  @font-face { font-family:'PretendardKV'; src:url(Pretendard-Regular.woff2) format('woff2'); font-weight:400; font-display:swap; }
+  .kvcover { position:absolute; left:30.556%; top:77.037%; width:38.889%; height:7.037%;
+             background:url(kv-cover.png) center/100% 100% no-repeat; pointer-events:none; }
+  .kvsub { position:absolute; left:0; right:0; top:78.1%; text-align:center; color:#35352E;
+           font-family:'PretendardKV',Pretendard,-apple-system,sans-serif; font-weight:400;
+           font-size:2.55cqw; line-height:1.37; letter-spacing:-0.01em; pointer-events:none; }
+  .kv.ko .kvcover, .kv.ko .kvsub { display:none; }
   .day { margin:4px 16px 0; border-radius:14px; padding:16px 18px; text-align:center; }
   .day.fri { background:var(--green); color:var(--ink); }
   .day.sat { background:var(--ink); color:var(--cream); }
@@ -44,9 +52,11 @@
 </head>
 <body>
 <main class="card">
-  <div class="kv" role="img" aria-label="목욕마켓 락커키">
+  <div class="kv ko" id="kv" role="img" aria-label="목욕마켓 락커키">
     <div class="name" id="name">목욕러</div>
     <div class="keyover" aria-hidden="true"></div>
+    <div class="kvcover" aria-hidden="true"></div>
+    <div class="kvsub" id="kvsub"></div>
   </div>
   <div class="langs" role="group" aria-label="언어 Language">
       <button data-l="ko">한국어</button><button data-l="en">English</button><button data-l="ja">日本語</button><button data-l="fi">Suomi</button><button data-l="sv">Svenska</button>
@@ -110,15 +120,15 @@
   // 언어: ?lang= > 브라우저 언어 > 한국어. 날짜 카드·안내 문구·주의사항이 함께 바뀜
   (function(){
     var T = {
-      ko:{fri:'4pm – 10pm · 로얄앤코하우스 서울', sat:'11am – 6pm · 로얄앤코하우스 서울',
+      ko:{kv:null, fri:'4pm – 10pm · 로얄앤코하우스 서울', sat:'11am – 6pm · 로얄앤코하우스 서울',
           g1:'{n}님의 락커키가 나왔어요.', g2:'입구 카운터에서 이 화면을 보여주세요.', g3:'화면을 캡처해 두면 줄 서서 다시 열 필요가 없어요'},
-      en:{fri:'4pm – 10pm · ROYAL&CO. HOUSE Seoul', sat:'11am – 6pm · ROYAL&CO. HOUSE Seoul',
+      en:{kv:null, fri:'4pm – 10pm · ROYAL&CO. HOUSE Seoul', sat:'11am – 6pm · ROYAL&CO. HOUSE Seoul',
           g1:'{n}, your locker key is ready.', g2:'Show this screen at the entrance counter.', g3:'Take a screenshot so you don’t have to reopen it in line.'},
-      ja:{fri:'16:00 – 22:00 · ROYAL&CO. HOUSE ソウル', sat:'11:00 – 18:00 · ROYAL&CO. HOUSE ソウル',
+      ja:{kv:['お風呂が好きなあなたへ','きっと好きになる45のブランドを'], fri:'16:00 – 22:00 · ROYAL&CO. HOUSE ソウル', sat:'11:00 – 18:00 · ROYAL&CO. HOUSE ソウル',
           g1:'{n}さんのロッカーキーができました。', g2:'入口カウンターでこの画面をご提示ください。', g3:'スクリーンショットを保存しておくと、列で開き直す必要がありません。'},
-      fi:{fri:'klo 16–22 · ROYAL&CO. HOUSE Soul', sat:'klo 11–18 · ROYAL&CO. HOUSE Soul',
+      fi:{kv:['Sinulle, joka rakastat kylpemistä –','45 brändiä, joihin ihastut'], fri:'klo 16–22 · ROYAL&CO. HOUSE Soul', sat:'klo 11–18 · ROYAL&CO. HOUSE Soul',
           g1:'{n}, pukukaappisi avain on valmis.', g2:'Näytä tämä näkymä sisäänkäynnin tiskillä.', g3:'Ota kuvakaappaus, niin sinun ei tarvitse avata sivua uudelleen jonossa.'},
-      sv:{fri:'kl. 16–22 · ROYAL&CO. HOUSE Seoul', sat:'kl. 11–18 · ROYAL&CO. HOUSE Seoul',
+      sv:{kv:['Till dig som älskar att bada –','45 varumärken du kommer att älska'], fri:'kl. 16–22 · ROYAL&CO. HOUSE Seoul', sat:'kl. 11–18 · ROYAL&CO. HOUSE Seoul',
           g1:'{n}, din skåpnyckel är klar.', g2:'Visa den här skärmen vid entrédisken.', g3:'Ta en skärmdump så slipper du öppna sidan igen i kön.'}
     };
     var sat = q.get('d') === '21' || /21|토|SAT/i.test(q.get('d') || '');
@@ -133,6 +143,9 @@
       document.getElementById('g3').textContent = t.g3;
       document.getElementById('time').textContent = sat ? t.sat : t.fri;
       document.documentElement.lang = l;
+      var kv = document.getElementById('kv'), sub = document.getElementById('kvsub');
+      kv.classList.toggle('ko', l === 'ko');      // 국문은 KV 원본 그대로
+      sub.textContent = ''; if (t.kv) { sub.append(t.kv[0], document.createElement('br'), t.kv[1]); }
       document.querySelectorAll('.notice ul').forEach(function(u){ u.classList.toggle('on', u.lang === l); });
       document.querySelectorAll('.langs button').forEach(function(x){ x.setAttribute('aria-pressed', x.dataset.l === l); });
     }
