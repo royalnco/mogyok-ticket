@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>목욕마켓² 락커키</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+  :root { --bg:#CCC9C2; --ink:#231F20; --green:#00B003; --cream:#F4F1EA; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html,body { background:var(--bg); color:var(--ink); font-family:Pretendard,-apple-system,sans-serif; }
+  body { min-height:100svh; display:flex; flex-direction:column; align-items:center; }
+  .card { width:100%; max-width:480px; }
+  .kv { position:relative; width:100%; aspect-ratio:1080/1350; background:url(kv.jpg) center/cover; container-type:inline-size; }
+  /* tag centre: x 550/1080, y 655/1350; inner usable diameter ~ 300/1080 */
+  .name { position:absolute; left:53%; top:49%; transform:translate(-50%,-50%) rotate(-4deg);
+          width:27cqw; text-align:center; font-weight:900; line-height:1; letter-spacing:-0.04em;
+          color:var(--ink); white-space:nowrap; font-size:15cqw; }
+  .day { margin:4px 16px 0; border-radius:14px; padding:16px 18px; text-align:center; }
+  .day.fri { background:var(--green); color:var(--ink); }
+  .day.sat { background:var(--ink); color:var(--cream); }
+  .day .date { font-size:34px; font-weight:900; letter-spacing:-0.02em; }
+  .day .time { font-size:15px; font-weight:600; margin-top:4px; opacity:.9; }
+  .guide { padding:18px 20px 32px; text-align:center; font-size:15px; line-height:1.6; }
+  .guide b { font-weight:800; }
+  .guide small { display:block; margin-top:8px; font-size:12px; opacity:.7; }
+</style>
+</head>
+<body>
+<main class="card">
+  <div class="kv" role="img" aria-label="목욕마켓 락커키">
+    <div class="name" id="name">목욕러</div>
+  </div>
+  <div class="day fri" id="day">
+    <div class="date" id="date">11.20 FRI</div>
+    <div class="time" id="time">4pm – 10pm · 로얄앤코하우스 서울</div>
+  </div>
+  <p class="guide">
+    <b id="who">목욕러</b>님의 락커키가 나왔어요.<br>
+    입구 카운터에서 이 화면을 보여주세요.<br>진짜 팔찌로 바꿔드립니다.
+    <small>화면을 캡처해 두면 줄 서서 다시 열 필요가 없어요</small>
+  </p>
+</main>
+<script>
+  var q = new URLSearchParams(location.search);
+  var raw = (q.get('n') || '').trim().replace(/\s+/g, ' ');
+  var name = Array.from(raw).slice(0, 8).join('') || '목욕러';
+  var el = document.getElementById('name');
+  el.textContent = name;
+  document.getElementById('who').textContent = name;
+  var len = Array.from(name).length;
+  var hangul = /[가-힣]/.test(name);
+  var size = hangul ? [15,15,12,9,7.5,6.5,5.6,5][Math.min(len,8)-1] : [15,15,11,9,7.5,6.2,5.4,4.8][Math.min(len,8)-1];
+  el.style.fontSize = size + 'cqw';
+  if (q.get('d') === '21' || /21|토|SAT/i.test(q.get('d') || '')) {
+    var d = document.getElementById('day');
+    d.className = 'day sat';
+    document.getElementById('date').textContent = '11.21 SAT';
+    document.getElementById('time').textContent = '11am – 6pm · 로얄앤코하우스 서울';
+  }
+</script>
+</body>
+</html>
